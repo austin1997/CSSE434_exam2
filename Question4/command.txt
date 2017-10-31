@@ -1,0 +1,8 @@
+mkdir /tmp/zhaiz
+cp FlumeClass-0.0.1-SNAPSHOT.jar /tmp/zhaiz/
+flume-ng agent --conf-file agent.conf --name a1 --conf /tmp/zhaiz/FlumeClass-0.0.1-SNAPSHOT.jar 
+hadoop fs -put zhaizUDP.jar /tmp/Exams
+pig -param gradeInput=/tmp/Exams/grades.txt -param courseInput=/tmp/Exams/courses.txt -param pigOutput=/tmp/Exams -param username=zhaiz exam.pig 
+hive --hiveconf databaseName=exam --hiveconf tempTableName=tempTable --hiveconf tableName=examData  -f hiveCreate.hql 
+hive --hiveconf databaseName=exam --hiveconf tempTableName=tempTable --hiveconf tableName=examData --hiveconf pigOutput=/tmp/Exams/zhaiz/* -f hiveInsert.hql 
+hive --hiveconf databaseName=exam --hiveconf tableName=examData -f question4.hql 
